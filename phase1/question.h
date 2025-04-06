@@ -2,29 +2,38 @@
 #define QUESTION_H
 
 #include <string>
-using std::string;
 
-// Enum for question types.
+// Enumeration for question types.
 enum QuestionType { MCQ, TF, WR };
 
-// Node for multiple choice answer options.
+// Node for an MCQ choice.
 struct ChoiceNode {
-    char letter;           // e.g., 'A', 'B', etc.
-    string choiceText;     // Text for the choice.
-    ChoiceNode* next;      // Pointer to next choice.
+    char letter;
+    std::string choiceText;
+    ChoiceNode* next;
 };
 
-// Node for each question.
+// Node for a question.
 struct QuestionNode {
-    int id;                // An optional ID (for editing/deleting).
-    QuestionType type;     // MCQ, TF, or WR.
-    string questionText;   // The text of the question.
-    string correctAnswer;  // The correct answer (for MCQ: the letter; TF: "true"/"false"; WR: the answer text).
-    double pointValue;     // Must be non-negative.
-    string studentAnswer;  // To store the student's answer during assessment.
-    ChoiceNode* choices;   // For MCQs: pointer to linked list of choices (NULL for TF/WR).
-    QuestionNode* next;    // Pointer to next question.
+    QuestionType type;
+    std::string questionText;
+    double pointValue;
+    std::string correctAnswer;
+    std::string studentAnswer;  // To record the test taker’s answer.
+    ChoiceNode* choices;        // Only used for MCQ.
+    QuestionNode* next;
 };
+
+// Function prototypes for linked list operations.
+QuestionNode* createQuestionNode(QuestionType type, const std::string &questionText, double pointValue, const std::string &correctAnswer);
+void appendQuestion(QuestionNode*& head, QuestionNode* newQuestion);
+void addChoice(QuestionNode* q, char letter, const std::string &choiceText);
+void printQuestionBank(const QuestionNode* head);
+void deleteQuestionBank(QuestionNode*& head);
+
+// Functions for editing/deleting a specific question.
+void editQuestion(QuestionNode* head, int questionNumber, const std::string &newText, double newPointValue);
+void deleteQuestion(QuestionNode*& head, int questionNumber);
 
 #endif // QUESTION_H
 
