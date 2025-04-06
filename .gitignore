@@ -1,0 +1,11 @@
+# Ignore object files and executables
+*.o
+main_phase1
+*.tgz
+
+# Ignore backup files
+*~
+
+# Ignore system-specific files
+._* 
+
