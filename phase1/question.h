@@ -2,49 +2,29 @@
 #define QUESTION_H
 
 #include <string>
+using std::string;
 
-// Define the types of questions.
-enum QuestionType {
-    MCQ,  // Multiple Choice Question
-    TF,   // True/False Question
-    WR    // Written Response Question
+// Enum for question types.
+enum QuestionType { MCQ, TF, WR };
+
+// Node for multiple choice answer options.
+struct ChoiceNode {
+    char letter;           // e.g., 'A', 'B', etc.
+    string choiceText;     // Text for the choice.
+    ChoiceNode* next;      // Pointer to next choice.
 };
 
-// Structure for an answer choice (for MCQs).
-struct Choice {
-    char letter;             // e.g., 'A', 'B', etc.
-    std::string text;        // The text for the answer choice.
-    Choice* next;            // Pointer to the next choice.
+// Node for each question.
+struct QuestionNode {
+    int id;                // An optional ID (for editing/deleting).
+    QuestionType type;     // MCQ, TF, or WR.
+    string questionText;   // The text of the question.
+    string correctAnswer;  // The correct answer (for MCQ: the letter; TF: "true"/"false"; WR: the answer text).
+    double pointValue;     // Must be non-negative.
+    string studentAnswer;  // To store the student's answer during assessment.
+    ChoiceNode* choices;   // For MCQs: pointer to linked list of choices (NULL for TF/WR).
+    QuestionNode* next;    // Pointer to next question.
 };
-
-// Structure for a quiz question node.
-struct Question {
-    int id;                  // Unique identifier (set later).
-    QuestionType type;       // The type of question.
-    std::string questionText;// The question text.
-    double pointValue;       // Point value for the question.
-    std::string correctAnswer; // For MCQ, the correct letter (or answer text for TF/WR).
-    std::string studentAnswer; // To store the student's answer.
-    Choice* choices;         // For MCQs: pointer to the first choice (nullptr for others).
-    Question* next;          // Pointer to the next question in the list.
-};
-
-// Function prototypes for linked list operations:
-
-// Creates a new question node.
-Question* createQuestion(QuestionType type, const std::string &text, double pointValue, const std::string &correctAnswer);
-
-// Appends a new question node to the end of the linked list.
-void appendQuestion(Question*& head, Question* newQuestion);
-
-// For MCQs: Adds a new answer choice to a question.
-void addChoice(Question* q, char letter, const std::string &choiceText);
-
-// Displays the entire question bank (for debugging).
-void printQuestionBank(Question* head);
-
-// Frees all memory used by the question bank.
-void deleteQuestionBank(Question* head);
 
 #endif // QUESTION_H
 
